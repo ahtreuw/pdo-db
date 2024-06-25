@@ -1,0 +1,39 @@
+{
+  "name": "vulpes/pdo-db",
+  "type": "library",
+  "description": "PDO based database abstraction layer",
+  "keywords": [
+    "db",
+    "database",
+    "PDO",
+    "mysql",
+    "sql"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "András Würth",
+      "email": "vulpes@outlook.hu"
+    }
+  ],
+  "require": {
+    "php": ">=8.2",
+    "ext-pdo": "*",
+    "psr/log": "^3.0",
+    "psr/cache": "^3.0",
+    "psr/simple-cache": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "DB\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DB\\Test\\": "test/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "10.2.6"
+  }
+}
