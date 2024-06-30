@@ -5,7 +5,7 @@ namespace DB\SQL;
 readonly class SQL implements SQLInterface
 {
 
-    public function __construct(private string $sql, private array $parameters = [])
+    public function __construct(private string $sql = '', private array $parameters = [])
     {
     }
 
