@@ -23,7 +23,7 @@ class Factory implements FactoryInterface
 {
     public function createSelect(
         DBInterface                                $db,
-        null|CacheInterface|CacheItemPoolInterface $cache,
+        null|CacheInterface|CacheItemPoolInterface $cacheAdapter,
         string                                     $table,
         array|string                               $fields,
         null|string                                $into = null,
@@ -37,7 +37,7 @@ class Factory implements FactoryInterface
     {
         return new SelectStatement(
             db: $db,
-            cache: $cache,
+            cacheAdapter: $cacheAdapter,
             table: $table,
             fields: $fields,
             into: $into,
@@ -108,9 +108,9 @@ class Factory implements FactoryInterface
         );
     }
 
-    public function createSQL(string $sql): SQLInterface
+    public function createSQL(string $sql, array $parameters = []): SQLInterface
     {
-        return new SQL(sql: $sql);
+        return new SQL(sql: $sql, parameters: $parameters);
     }
 
     public function createPDO(string $dsn, string $username, string $password, array $options): PDO

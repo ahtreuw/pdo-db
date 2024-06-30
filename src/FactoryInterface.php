@@ -15,7 +15,7 @@ interface FactoryInterface
 {
     public function createSelect(
         DBInterface                                $db,
-        null|CacheInterface|CacheItemPoolInterface $cache,
+        null|CacheInterface|CacheItemPoolInterface $cacheAdapter,
         string                                     $table,
         string|array                               $fields,
         null|string                                $into = null,
@@ -50,7 +50,7 @@ interface FactoryInterface
         bool                     $useTransaction = false
     ): DeleteInterface;
 
-    public function createSQL(string $sql): SQLInterface;
+    public function createSQL(string $sql, array $parameters = []): SQLInterface;
 
     public function createPDO(string $dsn, string $username, string $password, array $options): PDO;
 }

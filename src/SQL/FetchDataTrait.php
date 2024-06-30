@@ -19,7 +19,7 @@ trait FetchDataTrait
         mixed                      ...$args
     ): array
     {
-        if ($cacheTtl === false || is_null($this->cache)) {
+        if ($cacheTtl === false || is_null($this->cacheAdapter)) {
             return $this->exec()->fetchAll($mode, ...$args) ?: [];
         }
 
@@ -41,7 +41,7 @@ trait FetchDataTrait
         int                        $cursorOffset = 0
     ): mixed
     {
-        if ($cacheTtl === false || is_null($this->cache)) {
+        if ($cacheTtl === false || is_null($this->cacheAdapter)) {
             return $this->exec()->fetch($mode, $cursorOrientation, $cursorOffset);
         }
 
@@ -62,7 +62,7 @@ trait FetchDataTrait
         null|int|DateInterval|bool $cacheTtl = false
     ): null|object
     {
-        if ($cacheTtl === false || is_null($this->cache)) {
+        if ($cacheTtl === false || is_null($this->cacheAdapter)) {
             return $this->exec()->fetchObject($class, $constructorArgs) ?: null;
         }
 
@@ -82,7 +82,7 @@ trait FetchDataTrait
         null|int|DateInterval|bool $cacheTtl = false
     ): mixed
     {
-        if ($cacheTtl === false || is_null($this->cache)) {
+        if ($cacheTtl === false || is_null($this->cacheAdapter)) {
             return $this->exec()->fetchColumn($column) ?: null;
         }
 
@@ -112,16 +112,16 @@ trait FetchDataTrait
     private function getCachedValue(string $cacheId): mixed
     {
         if (
-            $this->cache instanceof CacheInterface &&
-            $this->cache->hasItem($cacheId)
+            $this->cacheAdapter instanceof CacheInterface &&
+            $this->cacheAdapter->hasItem($cacheId)
         ) {
-            return $this->cache->get($cacheId);
+            return $this->cacheAdapter->get($cacheId);
         }
         if (
-            $this->cache instanceof CacheItemPoolInterface &&
-            $this->cache->hasItem($cacheId)
+            $this->cacheAdapter instanceof CacheItemPoolInterface &&
+            $this->cacheAdapter->hasItem($cacheId)
         ) {
-            return $this->cache->getItem($cacheId)->get();
+            return $this->cacheAdapter->getItem($cacheId)->get();
         }
         return null;
     }
@@ -132,12 +132,12 @@ trait FetchDataTrait
      */
     private function cacheResult(string $cacheId, null|int|DateInterval $cacheTtl, mixed $result): void
     {
-        if ($this->cache instanceof CacheInterface) {
-            $this->cache->set($cacheId, $result, $cacheTtl);
+        if ($this->cacheAdapter instanceof CacheInterface) {
+            $this->cacheAdapter->set($cacheId, $result, $cacheTtl);
             return;
         }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->save($this->cache->getItem($cacheId)->set($result)->expiresAfter($cacheTtl));
+        if ($this->cacheAdapter instanceof CacheItemPoolInterface) {
+            $this->cacheAdapter->save($this->cacheAdapter->getItem($cacheId)->set($result)->expiresAfter($cacheTtl));
         }
     }
 }

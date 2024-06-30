@@ -148,4 +148,6 @@ use Stringable;
 interface SQLInterface extends Stringable
 {
     public const MYSQL_FUNCTION_PATTERN = "/^([A-Z0-9_]+(\s{0,10})+(\())(.*)(\))$/";
+
+    public function getParameters(): array;
 }

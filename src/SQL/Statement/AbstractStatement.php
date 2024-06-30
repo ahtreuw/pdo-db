@@ -35,6 +35,9 @@ abstract class AbstractStatement implements Stringable
     protected function prepareValue(bool|string|int|float|null|SQLInterface $value): string
     {
         if ($value instanceof SQLInterface) {
+            foreach ($value->getParameters() as $key => $pValue) {
+                $this->parameters[$key] = $pValue;
+            }
             return $value->__toString();
         }
         return $this->createParameter($value);

@@ -24,7 +24,7 @@ class DB implements DBInterface
         private readonly string|null                                $username = null,
         private readonly string|null                                $password = null,
         private readonly array|null                                 $options = null,
-        private readonly null|CacheInterface|CacheItemPoolInterface $cache = null,
+        private readonly null|CacheInterface|CacheItemPoolInterface $cacheAdapter = null,
         public readonly SQLInterface                                $sql = new SQL,
         private readonly FactoryInterface                           $factory = new Factory,
         private readonly LoggerInterface                            $logger = new NullLogger

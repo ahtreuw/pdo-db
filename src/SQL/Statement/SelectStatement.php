@@ -40,7 +40,7 @@ class SelectStatement extends AbstractStatement implements SelectInterface
 
     public function __construct(
         private readonly DBInterface                                $db,
-        private readonly null|CacheInterface|CacheItemPoolInterface $cache,
+        private readonly null|CacheInterface|CacheItemPoolInterface $cacheAdapter,
         string                                                      $table,
         string|array                                                $fields,
         null|string                                                 $into = null,

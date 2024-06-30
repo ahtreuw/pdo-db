@@ -24,7 +24,7 @@ trait CommandTrait
     {
         return $this->factory->createSelect(
             db: $this,
-            cache: $this->cache,
+            cacheAdapter: $this->cacheAdapter,
             table: $table,
             fields: $fields,
             into: $into,
@@ -95,8 +95,8 @@ trait CommandTrait
         )->exec($this);
     }
 
-    public function sql(string $sql): SQLInterface
+    public function sql(string $sql, array $parameters = []): SQLInterface
     {
-        return $this->factory->createSQL($sql);
+        return $this->factory->createSQL($sql, $parameters);
     }
 }
