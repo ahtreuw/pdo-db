@@ -113,7 +113,7 @@ trait FetchDataTrait
     {
         if (
             $this->cacheAdapter instanceof CacheInterface &&
-            $this->cacheAdapter->hasItem($cacheId)
+            $this->cacheAdapter->has($cacheId)
         ) {
             return $this->cacheAdapter->get($cacheId);
         }
