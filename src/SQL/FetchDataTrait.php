@@ -102,7 +102,7 @@ trait FetchDataTrait
      */
     private function getCacheId(): string
     {
-        return self::DB_SELECT_CACHE_ID_PREFIX . md5($this->__toString());
+        return self::DB_SELECT_CACHE_ID_PREFIX . md5($this->__toString() . json_encode($this->getParameters()));
     }
 
     /**
