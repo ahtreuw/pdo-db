@@ -9,7 +9,7 @@ trait JoinsTrait
     protected const RIGHT_JOIN = "\r\nRIGHT JOIN %s%s ";
     protected const FULL_JOIN = "\r\nFULL JOIN %s%s ";
     protected const FULL_OUTER_JOIN = "\r\nFULL OUTER JOIN %s%s ";
-    protected const JOIN_ON = " ON %";
+    protected const JOIN_ON = " ON %s ";
     protected array $selfJoins = [];
     protected array $joins = [];
 
