@@ -30,7 +30,7 @@ trait WhereTrait
         return $prefix . implode(' AND ', $wheres);
     }
 
-    private function prepareWhereItem(string $key, mixed $item, bool $prepareValue): string
+    private function prepareWhereItem(string|int $key, mixed $item, bool $prepareValue): string
     {
         if (is_array($item)) {
             return sprintf('%s IN (%s)', $this->prepareKey($key), $this->prepareWhereItemValues($item));
