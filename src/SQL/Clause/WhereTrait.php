@@ -41,6 +41,9 @@ trait WhereTrait
             }
             return sprintf('%s = (%s)', $this->prepareKey($key), $this->mergeSubSelect($item));
         }
+        if (is_numeric($key) && is_string($item)) {
+            return $item;
+        }
         if (is_null($item) && str_contains($key, ' ')) {
             return sprintf('%s', $key);
         }
