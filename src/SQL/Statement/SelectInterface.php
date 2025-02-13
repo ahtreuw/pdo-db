@@ -31,6 +31,16 @@ interface SelectInterface extends JoinsInterface, WhereInterface
     ): array;
 
     /**
+     * @throws Throwable
+     */
+    public function fetchAllClass(
+        string                     $class,
+        int                        $mode = PDO::FETCH_DEFAULT,
+        null|int|DateInterval|bool $cacheTtl = false,
+        mixed                      ...$args
+    ): array;
+
+    /**
      * Fetches the next row from a result set
      *
      * @return mixed The return value on success depends on the fetch type, on failure FALSE is returned.
@@ -54,6 +64,15 @@ interface SelectInterface extends JoinsInterface, WhereInterface
      */
     public function fetchObject(
         string                     $class = 'stdClass',
+        array                      $constructorArgs = [],
+        null|int|DateInterval|bool $cacheTtl = false
+    ): null|object;
+
+    /**
+     * @throws Throwable
+     */
+    public function fetchClass(
+        string                     $class,
         array                      $constructorArgs = [],
         null|int|DateInterval|bool $cacheTtl = false
     ): null|object;
