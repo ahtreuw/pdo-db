@@ -8,10 +8,13 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as CacheItemPoolInvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException as SimpleCacheInvalidArgumentException;
+use ReflectionClass;
+use ReflectionException;
 
 trait FetchDataTrait
 {
     private const DB_SELECT_CACHE_ID_PREFIX = 'db.select.';
+    private const  STD_CLASS = 'stdClass';
 
     public function fetchAll(
         int                        $mode = PDO::FETCH_DEFAULT,
@@ -31,6 +34,29 @@ trait FetchDataTrait
 
         $this->cacheResult($cacheId, $cacheTtl, $result);
 
+        return $result;
+    }
+
+    public function fetchAllClass(
+        string                     $class,
+        int                        $mode = PDO::FETCH_DEFAULT,
+        null|int|DateInterval|bool $cacheTtl = false,
+        mixed                      ...$args
+    ): array
+    {
+        $result = $this->fetchAll($mode, $cacheTtl, ...$args);
+
+        if ($mode & PDO::FETCH_GROUP) {
+            foreach ($result as $i => $subResult) {
+                foreach ($subResult as $j => $item) {
+                    $result[$i][$j] = $this->mergeInto($class, $item);
+                }
+            }
+        } else {
+            foreach ($result as $i => $item) {
+                $result[$i] = $this->mergeInto($class, $item);
+            }
+        }
         return $result;
     }
 
@@ -75,6 +101,16 @@ trait FetchDataTrait
         $this->cacheResult($cacheId, $cacheTtl, $result);
 
         return $result;
+    }
+
+    public function fetchClass(
+        string                     $class,
+        array                      $constructorArgs = [],
+        null|int|DateInterval|bool $cacheTtl = false
+    ): null|object
+    {
+        $result = $this->fetchObject(self::STD_CLASS, $constructorArgs, $cacheTtl);
+        return $result ? $this->mergeInto($class, $result) : null;
     }
 
     public function fetchColumn(
@@ -139,5 +175,22 @@ trait FetchDataTrait
         if ($this->cacheAdapter instanceof CacheItemPoolInterface) {
             $this->cacheAdapter->save($this->cacheAdapter->getItem($cacheId)->set($result)->expiresAfter($cacheTtl));
         }
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    protected function mergeInto(string|object $class, object|array $data): object
+    {
+        $reflector = new ReflectionClass($class);
+        if (is_object($class) === false) {
+            $class = $reflector->newInstanceWithoutConstructor();
+        }
+        foreach ($data as $key => $value) {
+            if ($reflector->hasProperty($property = $map[$key] ?? $key)) {
+                $reflector->getProperty($property)->setValue($class, $value);
+            }
+        }
+        return $class;
     }
 }
